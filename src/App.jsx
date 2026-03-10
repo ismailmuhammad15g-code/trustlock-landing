@@ -19,7 +19,12 @@ function App() {
           </p>
         </div>
 
-        <a href="#" className="download-btn" role="button">
+        <a
+          href="#"
+          className="download-btn"
+          role="button"
+          onClick={(e) => e.preventDefault()}
+        >
           تحميل التطبيق (APK)
         </a>
       </main>
