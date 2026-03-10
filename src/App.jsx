@@ -20,21 +20,17 @@ function App() {
     setError('')
     setDecrypted(null)
     try {
-      const bytes = CryptoJS.AES.decrypt(
-        decodeURIComponent(encryptedData),
-        pin
-      )
+      const decodedHash = decodeURIComponent(encryptedData)
+      const bytes = CryptoJS.AES.decrypt(decodedHash, pin)
       const plainText = bytes.toString(CryptoJS.enc.Utf8)
       if (!plainText) throw new Error('empty')
-      const data = JSON.parse(plainText)
-      if (
-        typeof data !== 'object' ||
-        data === null ||
-        (!data.platform && !data.username && !data.email && !data.password)
-      ) {
-        throw new Error('invalid')
+      try {
+        const data = JSON.parse(plainText)
+        if (typeof data !== 'object' || data === null) throw new Error('invalid')
+        setDecrypted(data)
+      } catch {
+        setError('❌ فشل فك التشفير. تحقق من الرمز السري والبيانات.')
       }
-      setDecrypted(data)
     } catch {
       setError('❌ فشل فك التشفير. تحقق من الرمز السري والبيانات.')
     }
